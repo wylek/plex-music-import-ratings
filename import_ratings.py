@@ -24,18 +24,18 @@ if __name__ == '__main__':
 	# start logic
 	choiceyes = {'yes','y'}
 	choiceno = {'no','n'}
-	choice = input("Do you want to overwrite existing ratings? (yes/no): ").lower()
+	choice = input("Overwrite your existing Plex library ratings? (y/n): ").lower()
 	if choice in choiceyes:
 		print("[INFO] Overwriting existing ratings")
-		choice = 'yes'
+		choice = 'y'
 	elif choice in choiceno:
 		print("[INFO] Skipping existing ratings")
-		choice = 'no'
+		choice = 'n'
 	else:
-		print("[ERROR] Please respond with 'yes' or 'no'. Exiting...")
+		print("[ERROR] Please respond with 'y' or 'n'. Exiting...")
 		quit()
 
-	choiceRatings = input("Do you want to sync 1 star ratings? (yes/no): ").lower()
+	choiceRatings = input("Do you want to sync 1 star ratings? (y/n): ").lower()
 	if choiceRatings in choiceyes:
 		print("[INFO] Syncing 1 star ratings")
 		choiceRatings = 10
@@ -43,7 +43,7 @@ if __name__ == '__main__':
 		print("[INFO] Skipping 1 star ratings")
 		choiceRatings = 20
 	else:
-		print("[ERROR] Please respond with 'yes' or 'no'. Exiting...")
+		print("[ERROR] Please respond with 'y' or 'n'. Exiting...")
 		quit()
 
 	print("[INFO] Loading iTunes library...")
@@ -69,7 +69,7 @@ if __name__ == '__main__':
 	print("[INFO] Connecting to Plex server...")
 	account = MyPlexAccount(plexAccount, plexPassword)
 	plex = account.resource(plexName).connect()
-	music = plex.library.section('Music Collection')
+	music = plex.library.section(config.plexMusicLibrary)
 
 	print("[INFO] Loading Plex music library in memory. This may take a while...")
 	plexLibrary = music.searchTracks()
