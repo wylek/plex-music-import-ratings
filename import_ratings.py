@@ -18,7 +18,7 @@ if __name__ == '__main__':
 	plexAccount = config.plexAccount
 	plexPassword = config.plexPassword
 	plexIdentifier = 'com.plexapp.plugins.library'
-	itunesLibraryName = 'library.xml'
+	itunesLibraryName = 'library-to-import.xml'
 	logFile = 'details.log'
 
 	# start logic
