@@ -84,25 +84,30 @@ if __name__ == '__main__':
 		counter += 1
 		print("\r[",counter,"/",plexLibraryCount,"]     ", end='', flush=True)
 		trackFullName = str(plexTrack.title) + ' - ' + str(plexTrack.artist().title) + ' - ' + str(plexTrack.album().title)
-		if choice == 'yes' or plexTrack.userRating == 0:
+		if choice == 'yes' or choice == 'y' or plexTrack.userRating == 0:
 			ratingValue = itunesRatingList.get(trackFullName, 999)
 			if ratingValue == 999:
 				file.write("[SKIPPED] No iTunes rating found   : " + str(trackFullName) + "\n")
 			elif ratingValue == plexTrack.userRating:
 				file.write("[SKIPPED] Rating already up-to-date: " + str(trackFullName) + "\n")
 			else:
-				payload = {
-					'X-Plex-Token': plexToken,
-					'identifier': plexIdentifier,
-					'key': plexTrack.ratingKey,
-					'rating': ratingValue,
-				}
-				response = requests.get(plexUrl, params=payload)
-				responseCode = str(response.status_code)
-				if response.ok:
+				try:
+					plexTrack.rate(ratingValue)
 					file.write("[MATCHED] Rating changed           : [" + str(plexTrack.userRating) + "] => [" + str(ratingValue) + "] : " + str(trackFullName) + "\n")
-				else:
-					file.write("[SKIPPED] Unknown error " + str(responseCode) + "        : " + str(trackFullName) + "\n")
+				except:
+					file.write("[SKIPPED] Unknown error        : " + str(trackFullName) + "\n")
+				#payload = {
+				#	'X-Plex-Token': plexToken,
+				#	'identifier': plexIdentifier,
+				#	'key': plexTrack.ratingKey,
+				#	'rating': ratingValue,
+				#}
+				#response = requests.put(plexUrl, params=payload)
+				#responseCode = str(response.status_code)
+				#if response.ok:
+				#	file.write("[MATCHED] Rating changed           : [" + str(plexTrack.userRating) + "] => [" + str(ratingValue) + "] : " + str(trackFullName) + "\n")
+				#else:
+				#	file.write("[SKIPPED] Unknown error " + str(responseCode) + "        : " + str(trackFullName) + "\n")
 		else:
 			file.write("[SKIPPED] Rating already exists    : " + str(trackFullName) + "\n")
 
