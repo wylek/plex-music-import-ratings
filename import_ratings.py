@@ -1,7 +1,5 @@
-# https://forums.plex.tv/t/importing-itunes-ratings-to-plex/446411
-# to upgrade:
-# pip3 install --upgrade plexapi
-# pip3 install --upgrade libpytunes
+# plex-music-import-ratings
+# based on: https://forums.plex.tv/t/importing-itunes-ratings-to-plex/446411
 
 from plexapi.myplex import MyPlexAccount
 from libpytunes import Library
@@ -18,13 +16,14 @@ if __name__ == '__main__':
 	plexAccount = config.plexAccount
 	plexPassword = config.plexPassword
 	plexIdentifier = 'com.plexapp.plugins.library'
-	itunesLibraryName = 'library-to-import.xml'
+	appleMusicLibraryName = config.appleMusicLibraryName
 	logFile = 'details.log'
 
 	# start logic
-	choiceyes = {'yes','y'}
-	choiceno = {'no','n'}
-	choice = input("Overwrite your existing Plex library ratings? (y/n): ").lower()
+	choiceyes = {'yes', 'y'}
+	choiceno = {'no', 'n'}
+	choice = input(
+		"Overwrite your existing Plex library ratings? (y/n): ").lower()
 	if choice in choiceyes:
 		print("[INFO] Overwriting existing ratings")
 		choice = 'y'
@@ -46,24 +45,26 @@ if __name__ == '__main__':
 		print("[ERROR] Please respond with 'y' or 'n'. Exiting...")
 		quit()
 
-	print("[INFO] Loading iTunes library...")
-	itunesLibrary = Library(itunesLibraryName)
-	itunesLibraryCount = len(itunesLibrary.songs.items())
-	print("[INFO] Total number of iTunes tracks: ", itunesLibraryCount)
+	print("[INFO] Loading Apple Music library...")
+	appleMusicLibrary = Library(appleMusicLibraryName)
+	appleMusicLibraryCount = len(appleMusicLibrary.songs.items())
+	print("[INFO] Total number of Apple Music tracks: ", appleMusicLibraryCount)
 	time.sleep(2)
 
-	print("[INFO] Optimizing iTunes library...")
-	itunesRatingList = { }
+	print("[INFO] Optimizing Apple Music library...")
+	appleMusicRatingList = {}
 	counter = 0
-	for x, song in itunesLibrary.songs.items():
+	for x, song in appleMusicLibrary.songs.items():
 		counter += 1
-		print("\r[",counter,"/",itunesLibraryCount,"]     ", end='', flush=True)
-		if song and song.rating and song.rating > choiceRatings :
-			songFullName = str(song.name) + ' - ' + str(song.album_artist) + ' - ' + str(song.album)
+		print("\r[", counter, "/", appleMusicLibraryCount, "]     ", end='', flush=True)
+		if song and song.rating and song.rating > choiceRatings:
+			songFullName = str(song.name) + ' - ' + \
+			                   str(song.album_artist) + ' - ' + str(song.album)
 			songRating = song.rating/10
-			itunesRatingList[songFullName] = songRating
-	itunesRatingListCount = len(itunesRatingList)
-	print("\n[INFO] Total number of iTunes tracks with ratings: ", itunesRatingListCount)
+			appleMusicRatingList[songFullName] = songRating
+	appleMusicRatingListCount = len(appleMusicRatingList)
+	print("\n[INFO] Total number of Apple Music tracks with ratings: ",
+	      appleMusicRatingListCount)
 	time.sleep(2)
 
 	print("[INFO] Connecting to Plex server...")
@@ -77,39 +78,36 @@ if __name__ == '__main__':
 	print("[INFO] Total number of Plex tracks: ", plexLibraryCount)
 	time.sleep(2)
 
-	print("[INFO] [", datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "] Updating ratings... See", logFile, "for more information")
-	file = open(logFile,"w", encoding="utf-8")
+	print("[INFO] [", datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+	      "] Updating ratings... See", logFile, "for more information")
+	file = open(logFile, "w", encoding="utf-8")
 	counter = 0
 	for plexTrack in plexLibrary:
 		counter += 1
-		print("\r[",counter,"/",plexLibraryCount,"]     ", end='', flush=True)
-		trackFullName = str(plexTrack.title) + ' - ' + str(plexTrack.artist().title) + ' - ' + str(plexTrack.album().title)
+		print("\r[", counter, "/", plexLibraryCount, "]     ", end='', flush=True)
+		trackFullName = str(plexTrack.title) + ' - ' + \
+                    str(plexTrack.artist().title) + \
+                    ' - ' + str(plexTrack.album().title)
 		if choice == 'yes' or choice == 'y' or plexTrack.userRating == 0:
-			ratingValue = itunesRatingList.get(trackFullName, 999)
+			ratingValue = appleMusicRatingList.get(trackFullName, 999)
 			if ratingValue == 999:
-				file.write("[SKIPPED] No iTunes rating found   : " + str(trackFullName) + "\n")
+				file.write("[SKIPPED] No Apple Music rating found   : "
+				           + str(trackFullName) + "\n")
 			elif ratingValue == plexTrack.userRating:
-				file.write("[SKIPPED] Rating already up-to-date: " + str(trackFullName) + "\n")
+				file.write("[SKIPPED] Rating already up-to-date: "
+				           + str(trackFullName) + "\n")
 			else:
 				try:
 					plexTrack.rate(ratingValue)
-					file.write("[MATCHED] Rating changed           : [" + str(plexTrack.userRating) + "] => [" + str(ratingValue) + "] : " + str(trackFullName) + "\n")
+					file.write("[MATCHED] Rating changed           : [" + str(plexTrack.userRating)
+					           + "] => [" + str(ratingValue) + "] : " + str(trackFullName) + "\n")
 				except:
-					file.write("[SKIPPED] Unknown error        : " + str(trackFullName) + "\n")
-				#payload = {
-				#	'X-Plex-Token': plexToken,
-				#	'identifier': plexIdentifier,
-				#	'key': plexTrack.ratingKey,
-				#	'rating': ratingValue,
-				#}
-				#response = requests.put(plexUrl, params=payload)
-				#responseCode = str(response.status_code)
-				#if response.ok:
-				#	file.write("[MATCHED] Rating changed           : [" + str(plexTrack.userRating) + "] => [" + str(ratingValue) + "] : " + str(trackFullName) + "\n")
-				#else:
-				#	file.write("[SKIPPED] Unknown error " + str(responseCode) + "        : " + str(trackFullName) + "\n")
+					file.write("[SKIPPED] Unknown error        : "
+					           + str(trackFullName) + "\n")
 		else:
-			file.write("[SKIPPED] Rating already exists    : " + str(trackFullName) + "\n")
+			file.write("[SKIPPED] Rating already exists    : "
+			           + str(trackFullName) + "\n")
 
 	file.close()
-	print("\n[INFO] [", datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "] All done!")
+	print("\n[INFO] [", datetime.now().strftime(
+		"%Y-%m-%d %H:%M:%S"), "] All done!")

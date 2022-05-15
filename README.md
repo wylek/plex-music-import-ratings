@@ -10,8 +10,8 @@ https://forums.plex.tv/t/importing-itunes-ratings-to-plex/446411
 
 Install prerequisites (plexapi, libpytunes) using pip:
 
-pip install plexapi
-pip install libpytunes
+    pip install plexapi
+    pip install libpytunes
 
 ## Config
 
@@ -23,6 +23,7 @@ Create a config.py containing:
     plexAccount = '< PLEX ACCOUNT EMAIL >'
     plexPassword = '< PLEX ACCOUNT PASS >'
     plexMusicLibrary = '< PLEX MUSIC LIBRARY NAME >'
+    appleMusicLibraryName = '< LIBRARY XML FILE TO IMPORT>.xml'
 
 ## Upgrade
 
