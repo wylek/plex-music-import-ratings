@@ -13,8 +13,8 @@ if __name__ == '__main__':
 	plexUrl = config.plexUrl
 	plexName = config.plexName
 	plexToken = config.plexToken
-	plexAccount = config.plexAccount
-	plexPassword = config.plexPassword
+	#plexAccount = config.plexAccount
+	#plexPassword = config.plexPassword
 	plexIdentifier = 'com.plexapp.plugins.library'
 	appleMusicLibraryName = config.appleMusicLibraryName
 	logFile = 'details.log'
@@ -49,6 +49,11 @@ if __name__ == '__main__':
 	appleMusicLibrary = Library(appleMusicLibraryName)
 	appleMusicLibraryCount = len(appleMusicLibrary.songs.items())
 	print("[INFO] Total number of Apple Music tracks: ", appleMusicLibraryCount)
+	file_debug = open("library-parsed-rated-songs.log", "w", encoding="utf-8")
+	for id, song in appleMusicLibrary.songs.items():
+	    if song and song.rating:
+	        file_debug.write("{a} - {t}, {r}\n".format(
+	        	a=song.artist, t=song.name, r=song.rating))
 	time.sleep(2)
 
 	print("[INFO] Optimizing Apple Music library...")
@@ -59,7 +64,7 @@ if __name__ == '__main__':
 		print("\r[", counter, "/", appleMusicLibraryCount, "]     ", end='', flush=True)
 		if song and song.rating and song.rating > choiceRatings:
 			songFullName = str(song.name) + ' - ' + \
-			                   str(song.album_artist) + ' - ' + str(song.album)
+			                   str(song.artist) + ' - ' + str(song.album)
 			songRating = song.rating/10
 			appleMusicRatingList[songFullName] = songRating
 	appleMusicRatingListCount = len(appleMusicRatingList)
@@ -68,7 +73,8 @@ if __name__ == '__main__':
 	time.sleep(2)
 
 	print("[INFO] Connecting to Plex server...")
-	account = MyPlexAccount(plexAccount, plexPassword)
+	#account = MyPlexAccount(plexAccount, plexPassword)
+	account = MyPlexAccount(plexToken)
 	plex = account.resource(plexName).connect()
 	music = plex.library.section(config.plexMusicLibrary)
 
@@ -88,7 +94,7 @@ if __name__ == '__main__':
 		trackFullName = str(plexTrack.title) + ' - ' + \
                     str(plexTrack.artist().title) + \
                     ' - ' + str(plexTrack.album().title)
-		if choice == 'yes' or choice == 'y' or plexTrack.userRating == 0:
+		if choice == 'yes' or choice == 'y' or plexTrack.userRating < 1:
 			ratingValue = appleMusicRatingList.get(trackFullName, 999)
 			if ratingValue == 999:
 				file.write("[SKIPPED] No Apple Music rating found   : "
