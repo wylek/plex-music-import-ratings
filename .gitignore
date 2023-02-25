@@ -2,6 +2,7 @@
 config.py
 library-to-import.xml
 details.log
+libpytunes/
 
 # Created by https://www.gitignore.io/api/macos
 
