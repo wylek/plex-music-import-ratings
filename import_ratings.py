@@ -73,7 +73,6 @@ if __name__ == '__main__':
 	time.sleep(2)
 
 	print("[INFO] Connecting to Plex server...")
-	#account = MyPlexAccount(plexAccount, plexPassword)
 	account = MyPlexAccount(plexToken)
 	plex = account.resource(plexName).connect()
 	music = plex.library.section(config.plexMusicLibrary)
@@ -96,13 +95,7 @@ if __name__ == '__main__':
                     ' - ' + str(plexTrack.album().title)
 		if choice == 'yes' or choice == 'y' or plexTrack.userRating < 1:
 			ratingValue = appleMusicRatingList.get(trackFullName, 999)
-			if ratingValue == 999:
-				file.write("[SKIPPED] No Apple Music rating found   : "
-				           + str(trackFullName) + "\n")
-			elif ratingValue == plexTrack.userRating:
-				file.write("[SKIPPED] Rating already up-to-date: "
-				           + str(trackFullName) + "\n")
-			else:
+			if ratingValue < 999 and ratingValue != plexTrack.userRating:
 				try:
 					plexTrack.rate(ratingValue)
 					file.write("[MATCHED] Rating changed           : [" + str(plexTrack.userRating)
@@ -110,10 +103,6 @@ if __name__ == '__main__':
 				except:
 					file.write("[SKIPPED] Unknown error        : "
 					           + str(trackFullName) + "\n")
-		else:
-			file.write("[SKIPPED] Rating already exists    : "
-			           + str(trackFullName) + "\n")
-
 	file.close()
 	print("\n[INFO] [", datetime.now().strftime(
-		"%Y-%m-%d %H:%M:%S"), "] All done!")
+		"%Y-%m-%d %H:%M:%S"), "] Complete!")
