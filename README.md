@@ -20,10 +20,12 @@ Create a config.py containing:
     plexUrl = 'http://< PLEX IP ADDRESS OR URL >/:/rate'
     plexName = '< PLEX SERVER NAME >'
     plexToken = '< PLEX SERVER TOKEN >'
-    plexAccount = '< PLEX ACCOUNT EMAIL >'
-    plexPassword = '< PLEX ACCOUNT PASS >'
     plexMusicLibrary = '< PLEX MUSIC LIBRARY NAME >'
     appleMusicLibraryName = '< LIBRARY XML FILE TO IMPORT>.xml'
+
+### Plex Authentication
+
+Use the helper script get_token.py to generate a Plex authentication token.
 
 ## Upgrade
 
