@@ -1,7 +1,5 @@
-certifi==2023.5.7
-charset-normalizer==3.1.0
-idna==3.4
-libpytunes==1.5.2
-PlexAPI==4.13.4
-six==1.16.0
-urllib3==2.0.2
+certifi>=2023.5.7
+charset-normalizer>=3.1.0
+idna>=3.4
+PlexAPI>=4.13.4
+urllib3>=2.0.2

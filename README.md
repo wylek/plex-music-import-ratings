@@ -2,16 +2,15 @@
 
 ## Source
 
-My customizations are based on the original source script here:
-
-https://forums.plex.tv/t/importing-itunes-ratings-to-plex/446411
+My customizations are based on the [original source script](https://forums.plex.tv/t/importing-itunes-ratings-to-plex/446411) from Plex forums user freshprince.
 
 ## Install
 
-Install prerequisites (plexapi, libpytunes) using pip:
+1. Install prerequisites (plexapi) using pip:
 
     pip install plexapi
-    pip install libpytunes
+
+2. Manually download libpytunes from [https://github.com/liamks/libpytunes](https://github.com/liamks/libpytunes)
 
 ## Config
 
@@ -29,7 +28,8 @@ Use the helper script get_token.py to generate a Plex authentication token.
 
 ## Upgrade
 
-Upgrade plexapi and libpytunes using pip:
+1. Upgrade plexapi using pip:
 
     pip install --upgrade plexapi
-    pip install --upgrade libpytunes
+
+2. Manually download libpytunes from [https://github.com/liamks/libpytunes](https://github.com/liamks/libpytunes)
