@@ -1,3 +1,4 @@
+"""plex-music-import-ratings > get_token.py helper script to register a new Plex API token"""
 #!/usr/bin/env python3
 
 from base64 import b64encode
@@ -5,7 +6,8 @@ from contextlib import closing
 from hashlib import sha512
 from http.client import HTTPSConnection
 from json import loads
-import sys, os
+import sys
+import os
 
 try:
     username = input('Username: ')
@@ -16,10 +18,10 @@ try:
 except KeyboardInterrupt:
     sys.exit(os.EX_NOINPUT)
 
-client_id = sha512('{} {}'.format(client_name, client_version).encode()).hexdigest()
+CLIENT_ID = sha512('{} {}'.format(client_name, client_version).encode()).hexdigest()
 base64string = b64encode('{}:{}'.format(username, password).encode())
 headers = {'Authorization': 'Basic {}'.format(base64string.decode('ascii')),
-           'X-Plex-Client-Identifier': client_id,
+           'X-Plex-Client-Identifier': CLIENT_ID,
            'X-Plex-Product': client_name,
            'X-Plex-Version': client_version}
 
