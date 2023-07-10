@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plex-music-import-ratings"
+version = "1.0.0"
+description = "Import Music (iTunes) ratings to a Plex Music library"
+dependencies = [
+    'libpytunes @ git+ssh://git@github.com/liamks/libpytunes.git',
+]
