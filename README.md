@@ -6,17 +6,17 @@ My customizations are based on the [original source script](https://forums.plex.
 
 ## Install
 
-1. Install prerequisites (plexapi) using pip:
+To install dependencies (PlexAPI, libpytunes), use the provided pyproject.toml file and [https://python-poetry.org/docs/](Poetry).
 
-    pip install plexapi
+    poetry install
 
-2. Manually download libpytunes from [https://github.com/liamks/libpytunes](https://github.com/liamks/libpytunes)
+Alternatively, manually download libpytunes from [https://github.com/liamks/libpytunes](https://github.com/liamks/libpytunes) and install any other prerequisites using your preferred method.
 
 ## Config
 
 Create a config.py containing:
 
-    plexUrl = 'http://< PLEX IP ADDRESS OR URL >/:/rate'
+    plexUrl = 'http://< PLEX IP ADDRESS OR URL >'
     plexName = '< PLEX SERVER NAME >'
     plexToken = '< PLEX SERVER TOKEN >'
     plexMusicLibrary = '< PLEX MUSIC LIBRARY NAME >'
@@ -26,10 +26,16 @@ Create a config.py containing:
 
 Use the helper script get_token.py to generate a Plex authentication token.
 
+## Execute
+
+Run the import_ratings.py script using the following command:
+
+    poetry run python import_ratings.py
+
 ## Upgrade
 
-1. Upgrade plexapi using pip:
+Upgrade dependencies using Poetry:
 
-    pip install --upgrade plexapi
+    poetry update
 
-2. Manually download libpytunes from [https://github.com/liamks/libpytunes](https://github.com/liamks/libpytunes)
+Alternatively, manually download libpytunes from [https://github.com/liamks/libpytunes](https://github.com/liamks/libpytunes) and update any other prerequisites using your preferred method.
