@@ -3,7 +3,7 @@
 from datetime import datetime
 import sys
 import time
-from plexapi.myplex import MyPlexAccount
+from plexapi.server import PlexServer
 from plexapi.exceptions import BadRequest
 from libpytunes import Library
 import config
@@ -13,8 +13,6 @@ if __name__ == '__main__':
     PLEX_URL = config.plexUrl
     PLEX_NAME = config.plexName
     PLEX_TOKEN = config.plexToken
-    # PLEX_ACCOUNT = config.plexAccount
-    # PLEX_PASSWORD = config.plexPassword
     PLEX_IDENTIFIER = 'com.plexapp.plugins.library'
     APPLE_MUSIC_LIBRARY_NAME = config.appleMusicLibraryName
     LOG_FILE = 'details.log'
@@ -75,8 +73,7 @@ if __name__ == '__main__':
     time.sleep(2)
 
     print("[INFO] Connecting to Plex server...")
-    account = MyPlexAccount(PLEX_TOKEN)
-    plex = account.resource(PLEX_NAME).connect()
+    plex = PlexServer(PLEX_URL, PLEX_TOKEN)
     music = plex.library.section(config.plexMusicLibrary)
 
     print("[INFO] Loading Plex music library in memory. This may take a while...")

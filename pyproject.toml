@@ -1,11 +1,17 @@
-[build-system]
-requires = ["setuptools", "setuptools-scm"]
-build-backend = "setuptools.build_meta"
-
-[project]
+[tool.poetry]
 name = "plex-music-import-ratings"
-version = "1.0.0"
+version = "1.0.1"
 description = "Import Music (iTunes) ratings to a Plex Music library"
-dependencies = [
-    'libpytunes @ git+ssh://git@github.com/liamks/libpytunes.git',
-]
+authors = ["Kyle <kyle@fkylewright.com>"]
+readme = "README.md"
+packages = [{include = "plex_music_import_ratings"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+libpytunes = {git = "ssh://git@github.com/liamks/libpytunes.git"}
+plexapi = "^4.15.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

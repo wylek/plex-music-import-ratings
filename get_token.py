@@ -1,6 +1,9 @@
 """plex-music-import-ratings > get_token.py helper script to register a new Plex API token"""
 #!/usr/bin/env python3
 
+# for more information, refer to PlexAPI documentation:
+# https://github.com/pkkid/python-plexapi#getting-a-plexserver-instance
+
 from base64 import b64encode
 from contextlib import closing
 from hashlib import sha512
