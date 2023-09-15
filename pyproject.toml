@@ -8,7 +8,7 @@ packages = [{include = "plex_music_import_ratings"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-libpytunes = {git = "ssh://git@github.com/liamks/libpytunes.git"}
+libpytunes = {git = "https://github.com/liamks/libpytunes.git"}
 plexapi = "^4.15.0"
 
 
