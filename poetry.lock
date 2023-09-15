@@ -120,9 +120,9 @@ six = ">=1.11.0"
 
 [package.source]
 type = "git"
-url = "ssh://git@github.com/liamks/libpytunes.git"
+url = "https://github.com/liamks/libpytunes.git"
 reference = "HEAD"
-resolved_reference = "d704832fa494291c71472194e2c4e8f03be42b9b"
+resolved_reference = "fde6ad4225d79b377936f9741ddf3bae02aef3d1"
 
 [[package]]
 name = "plexapi"
@@ -190,4 +190,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "bd8bc358c88213e0167a23b6dde97cb6c932600353dcbfb1e51ccfe167f1839f"
+content-hash = "1ef3bbe6f6aae02c1aa8b1a2a2cd405f1afa93165d9cc78c78dcf7d9c987bb95"
