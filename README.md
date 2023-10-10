@@ -6,7 +6,7 @@ My customizations are based on the [original source script](https://forums.plex.
 
 ## Install
 
-To install dependencies (PlexAPI, libpytunes), use the provided pyproject.toml file and [https://python-poetry.org/docs/](Poetry).
+To install dependencies (PlexAPI, libpytunes), use the provided pyproject.toml file and the [Poetry docs](https://python-poetry.org/docs/).
 
     poetry install
 
