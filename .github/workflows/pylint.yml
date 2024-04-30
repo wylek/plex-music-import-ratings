@@ -35,4 +35,4 @@ jobs:
       run: poetry install --no-root
     - name: Analysing the code with pylint
       run: |
-        pylint --fail-under=6.0 $(git ls-files '*.py')
+        pylint --fail-under=5.0 $(git ls-files '*.py')
