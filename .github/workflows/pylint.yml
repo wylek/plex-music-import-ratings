@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.12", "3.11"]
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -18,7 +18,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pylint
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Poetry setup
+      # You may pin to the exact commit or the version.
+      # uses: ClementWalter/poetry-action@845abd0cfcc6671c045a2f9df189360bb73e64c4
+      uses: ClementWalter/poetry-action@v1
     - name: Analysing the code with pylint
       run: |
         pylint --fail-under=6.0 $(git ls-files '*.py')
