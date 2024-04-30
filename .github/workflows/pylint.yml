@@ -32,7 +32,7 @@ jobs:
         path: ./.venv
         key: venv-${{ hashFiles('poetry.lock') }}
     - name: Install the project dependencies
-      run: poetry install
+      run: poetry install --no-root
     - name: Analysing the code with pylint
       run: |
         pylint --fail-under=6.0 $(git ls-files '*.py')
