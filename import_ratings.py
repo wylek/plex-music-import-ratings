@@ -18,28 +18,28 @@ if __name__ == '__main__':
     LOG_FILE = 'details.log'
 
     # start logic
-    choiceyes = {'yes', 'y'}
-    choiceno = {'no', 'n'}
-    choice = input(
+    CHOICE_YES = {'yes', 'y'}
+    CHOICE_NO = {'no', 'n'}
+    CHOICE = input(
         "Overwrite your existing Plex library ratings? (y/n): ").lower()
-    if choice in choiceyes:
+    if CHOICE in CHOICE_YES:
         print("[INFO] Overwriting existing ratings")
-        choice = 'y'
-    elif choice in choiceno:
+        CHOICE = 'y'
+    elif CHOICE in CHOICE_NO:
         print("[INFO] Skipping existing ratings")
-        choice = 'n'
+        CHOICE = 'n'
     else:
         print("[ERROR] Please respond with 'y' or 'n'. Exiting...")
-        quit()
+        sys.exit(0)
 
-    choiceRatings = input(
+    CHOICE_RATINGS = input(
         "Do you want to sync 1 star ratings? (y/n): ").lower()
-    if choiceRatings in choiceyes:
+    if CHOICE_RATINGS in CHOICE_YES:
         print("[INFO] Syncing 1 star ratings")
-        choiceRatings = 10
-    elif choiceRatings in choiceno:
+        CHOICE_RATINGS = 10
+    elif CHOICE_RATINGS in CHOICE_NO:
         print("[INFO] Skipping 1 star ratings")
-        choiceRatings = 20
+        CHOICE_RATINGS = 20
     else:
         print("[ERROR] Please respond with 'y' or 'n'. Exiting...")
         sys.exit(0)
@@ -56,21 +56,20 @@ if __name__ == '__main__':
     time.sleep(2)
 
     print("[INFO] Optimizing Apple Music library...")
-    appleMusicRatingList = {}
-    counter = 0
+    APPLE_MUSIC_RATING_LIST = {}
+    COUNTER = 0
     for x, song in appleMusicLibrary.songs.items():
-        counter += 1
-        print("\r[", counter, "/", appleMusicLibraryCount,
+        COUNTER += 1
+        print("\r[", COUNTER, "/", appleMusicLibraryCount,
               "]     ", end='', flush=True)
-        if song and song.rating and song.rating > choiceRatings:
-            songFullName = str(song.name) + ' - ' + \
+        if song and song.rating and song.rating > CHOICE_RATINGS:
+            SONG_FULL_NAME = str(song.name) + ' - ' + \
                 str(song.artist) + ' - ' + str(song.album)
-            songRating = song.rating/10
-            appleMusicRatingList[songFullName] = songRating
-    appleMusicRatingListCount = len(appleMusicRatingList)
+            SONG_RATING = song.rating/10
+            APPLE_MUSIC_RATING_LIST[SONG_FULL_NAME] = SONG_RATING
     print("\n[INFO] Total number of Apple Music tracks with ratings: ",
-          appleMusicRatingListCount)
-    time.sleep(2)
+          len(APPLE_MUSIC_RATING_LIST))
+    time.sleep(1)
 
     print("[INFO] Connecting to Plex server...")
     plex = PlexServer(PLEX_URL, PLEX_TOKEN)
@@ -80,29 +79,31 @@ if __name__ == '__main__':
     plexLibrary = music.searchTracks()
     plexLibraryCount = len(plexLibrary)
     print("[INFO] Total number of Plex tracks: ", plexLibraryCount)
-    time.sleep(2)
+    time.sleep(1)
+    
+    # TODO: add support for removing Plex-only ratings when the Apple Music rating is blank?
 
     print("[INFO] [", datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
           "] Updating ratings... See", LOG_FILE, "for more information")
     with open(LOG_FILE, "w", encoding="utf-8") as file:
-        counter = 0
+        COUNTER = 0
         for plexTrack in plexLibrary:
-            counter += 1
-            print("\r[", counter, "/", plexLibraryCount,
+            COUNTER += 1
+            print("\r[", COUNTER, "/", plexLibraryCount,
                 "]     ", end='', flush=True)
-            trackFullName = str(plexTrack.title) + ' - ' + \
+            TRACK_FULL_NAME = str(plexTrack.title) + ' - ' + \
                 str(plexTrack.artist().title) + \
                 ' - ' + str(plexTrack.album().title)
-            if choice == 'yes' or choice == 'y' or int(0 if plexTrack.userRating is None else plexTrack.userRating) < 1:
-                ratingValue = appleMusicRatingList.get(trackFullName, 999)
+            if CHOICE == 'y' or int(0 if plexTrack.userRating is None else plexTrack.userRating) < 1:
+                ratingValue = APPLE_MUSIC_RATING_LIST.get(TRACK_FULL_NAME, 999)
                 if ratingValue < 999 and ratingValue != plexTrack.userRating:
                     try:
                         plexTrack.rate(ratingValue)
                         file.write("[MATCHED] Rating changed           : [" + str(plexTrack.userRating)
-                                + "] => [" + str(ratingValue) + "] : " + str(trackFullName) + "\n")
+                                + "] => [" + str(ratingValue) + "] : " + str(TRACK_FULL_NAME) + "\n")
                     except BadRequest:
                         file.write("[SKIPPED] Unknown error        : "
-                                + str(trackFullName) + "\n")
+                                + str(TRACK_FULL_NAME) + "\n")
         file.close()
     print("\n[INFO] [", datetime.now().strftime(
         "%Y-%m-%d %H:%M:%S"), "] Complete!")
