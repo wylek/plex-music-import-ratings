@@ -5,6 +5,7 @@ description = "Import Music (iTunes) ratings to a Plex Music library"
 authors = ["Kyle <kyle@fkylewright.com>"]
 readme = "README.md"
 packages = [{include = "plex_music_import_ratings"}]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
