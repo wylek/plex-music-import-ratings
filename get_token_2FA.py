@@ -20,13 +20,3 @@ print("[INFO] Connected !")
 
 # This is the account Auth-Token
 print("Plex account Auth-Token:", account.authenticationToken)
-
-headers = {
-    'X-Plex-Product': 'plex-music-import-ratings',
-    'X-Plex-Client-Identifier': str(uuid.uuid4())
-}
-print("[INFO] Registering new application into Plex server...")
-device = createMyPlexDevice(headers=headers, account=account)
-
-# This is a new Application instance Auth-Token 
-print("App Auth-Token:", device.token)
