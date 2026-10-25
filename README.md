@@ -24,13 +24,17 @@ Create a config.py containing:
 
 ### Plex Authentication
 
-Use the helper script get_token.py to generate a Plex authentication token.
+Use the helper script get_token.py to generate a Plex authentication token. If your account uses two-factor authentication, use get_token_2FA.py instead.
 
 ## Execute
 
-Run the import_ratings.py script using the following command:
+Run the import_ratings.py script using the following command to sync your Apple Music ratings (1-5 stars) to Plex (0-10 scale):
 
     poetry run python import_ratings.py
+
+To batch update ratings for all tracks in a specific Plex playlist, run:
+
+    poetry run python update_playlist_ratings.py
 
 ## Upgrade
 
@@ -39,3 +43,10 @@ Upgrade dependencies using Poetry:
     poetry update
 
 Alternatively, manually download libpytunes from [https://github.com/liamks/libpytunes](https://github.com/liamks/libpytunes) and update any other prerequisites using your preferred method.
+
+## Troubleshooting
+
+If you encounter issues, check the generated log files for details:
+- details.log (for Apple Music imports)
+- playlist_ratings_update.log (for playlist updates)
+- library-parsed-rated-songs.log (for parsed Apple Music tracks)
